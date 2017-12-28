@@ -41,15 +41,6 @@ public class PuzzleSelectActivity extends Activity
 		cf.setSelection(0, true);
 
 
-
-
-		//intent = new Intent(this, PuzzleSolveActivity.class);
-
-		//TODO FOR SHOP
-		intent = new Intent(this, ShopSubscriptionActivity.class);
-
-
-
 		cf.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(final AdapterView< ? > parent, final View view, final int position, final long id) {
