@@ -40,12 +40,13 @@ public class PuzzleSelectActivity extends Activity
 		cf.setAdapter(coverImageAdapter);
 		cf.setSelection(0, true);
 
+		intent = new Intent(this, PuzzleSolveActivity.class);
 
 		cf.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(final AdapterView< ? > parent, final View view, final int position, final long id) {
-				//intent.putExtra("image", images[position]);
-				//intent.putExtra("difficulty", difficulty);
+				intent.putExtra("image", images[position]);
+				intent.putExtra("difficulty", difficulty);
 				PuzzleSelectActivity.this.startActivity(intent);
 			}
 
