@@ -13,12 +13,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 
+import com.example.user.zle.Constants;
 import com.example.user.zle.R;
 import com.example.user.zle.enums.Difficulty;
 import com.example.user.zle.enums.Type;
 
-public class Mask
-{
+public class Mask {
 	private static HashMap<String, Integer> resources = new HashMap<String, Integer>();
 
 	private boolean top;
@@ -32,29 +32,22 @@ public class Mask
 
 	private Context context;
 
-	private Difficulty difficulty;
 
 	private int offset;
 
-	public Mask(Context context, boolean top, boolean right,
-				Difficulty difficulty)
-	{
-		this(context, top, right, false, false, difficulty);
+	public Mask(Context context, boolean top, boolean right) {
+		this(context, top, right, false, false);
 		type = Type.CORNER;
 		mask = loadBitmap();
 	}
 
-	public Mask(Context context, boolean top, boolean right, boolean bottom,
-				Difficulty difficulty)
-	{
-		this(context, top, right, bottom, false, difficulty);
+	public Mask(Context context, boolean top, boolean right, boolean bottom) {
+		this(context, top, right, bottom, false);
 		type = Type.EDGE;
 		mask = loadBitmap();
 	}
 
-	public Mask(Context context, boolean top, boolean right, boolean bottom,
-				boolean left, Difficulty difficulty)
-	{
+	public Mask(Context context, boolean top, boolean right, boolean bottom, boolean left) {
 		super();
 
 		this.context = context;
@@ -64,7 +57,6 @@ public class Mask
 		this.bottom = bottom;
 		this.left = left;
 		this.type = Type.FULL;
-		this.difficulty = difficulty;
 
 		fillResourceMapping();
 
@@ -73,19 +65,13 @@ public class Mask
 		// With overhangs going 'outside' the piece to make it look
 		// All puzzle like and pretty.
 		// Because the pieces have already been make, we know the offsets.
-		if (difficulty == Difficulty.EASY)
-			this.offset = 10;
-		else if (difficulty == Difficulty.MEDIUM)
-			this.offset = 8;
-		else
-			this.offset = 5;
 
+		this.offset = Constants.OFFSET;
 		mask = loadBitmap();
 	}
 
-	private void fillResourceMapping()
-	{
-		if (resources.isEmpty() == false)
+	private void fillResourceMapping() {
+		if (!resources.isEmpty())
 			return;
 
 		resources.put("mask_32_corner_0_0", R.raw.mask_32_corner_0_0);
@@ -176,35 +162,25 @@ public class Mask
 		resources.put("mask_64_full_1_1_1_1", R.raw.mask_64_full_1_1_1_1);
 	}
 
-	private Bitmap loadBitmap()
-	{
+	private Bitmap loadBitmap() {
 		StringBuffer name = new StringBuffer("mask_");
 
-		if (difficulty == Difficulty.EASY)
-			name.append("64_");
-		else if (difficulty == Difficulty.MEDIUM)
-			name.append("48_");
-		else
-			name.append("32_");
+		name.append(Constants.NAME_APPEND);
 
-		if (type == Type.FULL)
-		{
+
+		if (type == Type.FULL) {
 			name.append("full");
 
 			append(top, name);
 			append(right, name);
 			append(bottom, name);
 			append(left, name);
-		}
-		else if (type == Type.EDGE)
-		{
+		} else if (type == Type.EDGE) {
 			name.append("edge");
 			append(top, name);
 			append(right, name);
 			append(bottom, name);
-		}
-		else
-		{
+		} else {
 			name.append("corner");
 			append(top, name);
 			append(right, name);
@@ -217,8 +193,7 @@ public class Mask
 
 	}
 
-	private void append(boolean dir, StringBuffer buf)
-	{
+	private void append(boolean dir, StringBuffer buf) {
 		if (dir)
 			buf.append("_1");
 		else
@@ -228,18 +203,15 @@ public class Mask
 	/**
 	 * Rotates the mask by 90° x the number given.
 	 *
-	 * @param times
-	 *            - amount of 90° turns.
+	 * @param times - amount of 90° turns.
 	 */
-	public void rotate(int times)
-	{
+	public void rotate(int times) {
 		Matrix rotM = new Matrix();
 		rotM.setRotate((90 * times) % 360, mask.getWidth(), mask.getHeight());
 		mask = Bitmap.createBitmap(mask, 0, 0, mask.getWidth(),
 				mask.getHeight(), rotM, true);
 
-		for (int i = 0; i < times; i++)
-		{
+		for (int i = 0; i < times; i++) {
 			boolean newRight = top;
 			boolean newBottom = right;
 			boolean newLeft = bottom;
@@ -252,53 +224,29 @@ public class Mask
 		}
 	}
 
-	public boolean isTop()
-	{
-		return top;
-	}
 
-	public boolean isRight()
-	{
+	public boolean isRight() {
 		return right;
 	}
 
-	public boolean isBottom()
-	{
+	public boolean isBottom() {
 		return bottom;
 	}
 
-	public boolean isLeft()
-	{
-		return left;
-	}
 
-	public Type getType()
-	{
-		return type;
-	}
-
-	public Difficulty getDifficulty()
-	{
-		return difficulty;
-	}
-
-	public Bitmap getMask()
-	{
+	public Bitmap getMask() {
 		return mask;
 	}
 
-	public int getOffset()
-	{
+	public int getOffset() {
 		return offset;
 	}
 
-	public int getWidth()
-	{
+	public int getWidth() {
 		return mask.getWidth();
 	}
 
-	public int getHeight()
-	{
+	public int getHeight() {
 		return mask.getHeight();
 	}
 }

@@ -12,6 +12,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 
+import com.example.user.zle.Constants;
 import com.example.user.zle.enums.Difficulty;
 
 import java.util.Random;
@@ -22,7 +23,7 @@ public class PuzzleGenerator {
 	private Context context;
 	private Bitmap image;
 	private int pieceSize;
-	private Difficulty difficulty;
+	//private Difficulty difficulty;
 
 	Random ran = new Random();
 
@@ -30,11 +31,10 @@ public class PuzzleGenerator {
 		this.context = c;
 	}
 
-	public Puzzle generatePuzzle(Context context, Bitmap img,
-								 Difficulty difficulty, String location) {
+	public Puzzle generatePuzzle(Context context, Bitmap img, String location) {
 		// Do we need to scale, and if so, by how much?
-		this.pieceSize = difficulty.pieceSize();
-		this.difficulty = difficulty;
+		this.pieceSize = Constants.PIECE_SIZE;
+		//this.difficulty = difficulty;
 
 		int wid = img.getWidth() % pieceSize;
 		int hei = img.getHeight() % pieceSize;
@@ -81,16 +81,12 @@ public class PuzzleGenerator {
 				corner_number++;
 
 				if (corner_number == 1) {
-					masks[i] = new Mask(context, RB(), !masks[i - 1].isRight(),
-							difficulty);
+					masks[i] = new Mask(context, RB(), !masks[i - 1].isRight());
 					masks[i].rotate(2);
 				} else if (corner_number == 2) {
-					masks[i] = new Mask(context,
-							!masks[i - puzzle_width].isBottom(), RB(),
-							difficulty);
+					masks[i] = new Mask(context, !masks[i - puzzle_width].isBottom(), RB());
 				} else if (corner_number == 3) {
-					masks[i] = new Mask(context, !masks[i - 1].isRight(),
-							!masks[i - puzzle_width].isBottom(), difficulty);
+					masks[i] = new Mask(context, !masks[i - 1].isRight(), !masks[i - puzzle_width].isBottom());
 					masks[i].rotate(3);
 				}
 				continue;
@@ -98,16 +94,14 @@ public class PuzzleGenerator {
 
 			// This is all of the top edge cases.
 			if (corner_number < 1) {
-				masks[i] = new Mask(context, RB(), RB(),
-						!masks[i - 1].isRight(), difficulty);
+				masks[i] = new Mask(context, RB(), RB(), !masks[i - 1].isRight());
 				masks[i].rotate(1);
 				continue;
 			}
 
 			// This handles all of the bottom edge cases.
 			if (corner_number == 2) {
-				masks[i] = new Mask(context, !masks[i - 1].isRight(), !masks[i
-						- puzzle_width].isBottom(), RB(), difficulty);
+				masks[i] = new Mask(context, !masks[i - 1].isRight(), !masks[i - puzzle_width].isBottom(), RB());
 				masks[i].rotate(3);
 				continue;
 			}
@@ -117,12 +111,9 @@ public class PuzzleGenerator {
 			// and right edges, so we can safely toggle.
 			if (isEdge(i, puzzle_width, puzzle_height)) {
 				if (left_edge) {
-					masks[i] = new Mask(context,
-							!masks[i - puzzle_width].isBottom(), RB(), RB(),
-							difficulty);
+					masks[i] = new Mask(context, !masks[i - puzzle_width].isBottom(), RB(), RB());
 				} else {
-					masks[i] = new Mask(context, RB(), !masks[i - 1].isRight(),
-							!masks[i - puzzle_width].isBottom(), difficulty);
+					masks[i] = new Mask(context, RB(), !masks[i - 1].isRight(), !masks[i - puzzle_width].isBottom());
 					masks[i].rotate(2);
 				}
 
@@ -131,8 +122,7 @@ public class PuzzleGenerator {
 			}
 
 			// The only possible option now are the full pieces.
-			masks[i] = new Mask(context, !(masks[i - puzzle_width].isBottom()),
-					RB(), RB(), !(masks[i - 1].isRight()), difficulty);
+			masks[i] = new Mask(context, !(masks[i - puzzle_width].isBottom()), RB(), RB(), !(masks[i - 1].isRight()));
 		}
 
 		Bitmap[] images = new Bitmap[masks.length];
@@ -157,7 +147,7 @@ public class PuzzleGenerator {
 				position++;
 			}
 		}
-		return new Puzzle(context, images, location, puzzle_width, difficulty);
+		return new Puzzle(context, images, location, puzzle_width);
 	}
 
 	/*
@@ -170,16 +160,16 @@ public class PuzzleGenerator {
 
 		switch (which) {
 			case 0:
-				rv = new Mask(context, false, false, difficulty);
+				rv = new Mask(context, false, false);
 				break;
 			case 1:
-				rv = new Mask(context, false, true, difficulty);
+				rv = new Mask(context, false, true);
 				break;
 			case 2:
-				rv = new Mask(context, true, false, difficulty);
+				rv = new Mask(context, true, false);
 				break;
 			default:
-				rv = new Mask(context, true, true, difficulty);
+				rv = new Mask(context, true, true);
 				break;
 		}
 

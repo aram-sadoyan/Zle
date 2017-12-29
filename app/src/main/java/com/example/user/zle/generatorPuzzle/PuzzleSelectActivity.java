@@ -21,7 +21,6 @@ public class PuzzleSelectActivity extends Activity
 {
 	private Button button;
 
-	private String difficulty = "easy";
 	private int[] images;
 	private Intent intent;
 
@@ -46,7 +45,6 @@ public class PuzzleSelectActivity extends Activity
 			@Override
 			public void onItemClick(final AdapterView< ? > parent, final View view, final int position, final long id) {
 				intent.putExtra("image", images[position]);
-				intent.putExtra("difficulty", difficulty);
 				PuzzleSelectActivity.this.startActivity(intent);
 			}
 
@@ -54,28 +52,27 @@ public class PuzzleSelectActivity extends Activity
 
 		button = (Button)findViewById(R.id.difficulty);
 
-		button.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				if(difficulty.equals("easy"))
-				{
-					difficulty = "medium";
-					button.setText(R.string.medium);
-				}
-				else if(difficulty.equals("medium"))
-				{
-					difficulty = "hard";
-					button.setText(R.string.hard);
-				}
-				else
-				{
-					difficulty = "easy";
-					button.setText(R.string.easy);
-				}
-			}
-
-		});
+//		button.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v)
+//			{
+//				if(difficulty.equals("easy"))
+//				{
+//					difficulty = "medium";
+//					button.setText(R.string.medium);
+//				}
+//				else if(difficulty.equals("medium"))
+//				{
+//					difficulty = "hard";
+//					button.setText(R.string.hard);
+//				}
+//				else
+//				{
+//					difficulty = "easy";
+//					button.setText(R.string.easy);
+//				}
+//			}
+//
+//		});
 	}
 }

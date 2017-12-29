@@ -28,6 +28,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.widget.Toast;
 
+import com.example.user.zle.Constants;
 import com.example.user.zle.R;
 import com.example.user.zle.enums.Difficulty;
 
@@ -43,9 +44,9 @@ public class Puzzle {
 		this.findNeighbors(width);
 	}
 
-	public Puzzle(Context c, Bitmap[] images, String location, int width, Difficulty d) {
+	public Puzzle(Context c, Bitmap[] images, String location, int width) {
 		for (int i = 0; i < images.length; i++) {
-			pieces.add(new Piece(c, images[i], d.getOffset()));
+			pieces.add(new Piece(c, images[i], Constants.OFFSET));
 		}
 
 		this.width = width;

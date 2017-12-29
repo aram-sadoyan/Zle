@@ -42,12 +42,12 @@ public class PuzzleView extends View implements OnGestureListener,
 		super(context, attrs);
 	}
 
-	public void loadPuzzle(Bitmap image, Difficulty difficulty, String location) {
+	public void loadPuzzle(Bitmap image, String location) {
 		gesture = new GestureDetector(this.getContext(), this);
 		scaleGesture = new ScaleGestureDetector(this.getContext(), this);
 
 		puzzle = new PuzzleGenerator(this.getContext()).generatePuzzle(
-				this.getContext(), image, difficulty, location);
+				this.getContext(), image, location);
 		puzzle.savePuzzle(getContext(), location, true);
 
 		Piece.resetSerial();
@@ -109,7 +109,7 @@ public class PuzzleView extends View implements OnGestureListener,
 		Piece possibleNewTapped = null;
 		boolean shouldPan = true;
 
-		for (int i = this.puzzle.getPieces().size()-1; i >= 0; i--) {
+		for (int i = this.puzzle.getPieces().size() - 1; i >= 0; i--) {
 			Piece p = this.puzzle.getPieces().get(i);
 
 			if (p.inMe((int) (e1.getX() / scale), (int) (e1.getY() / scale))) {
@@ -239,7 +239,7 @@ public class PuzzleView extends View implements OnGestureListener,
 	public void onAnimationEnd(Animation animation) {
 		this.puzzle.solve();
 		Piece zero = this.puzzle.getPieces().get(0);
-		zero.getGroup().translate(zero.getX()+5, zero.getY()+5);
+		zero.getGroup().translate(zero.getX() + 5, zero.getY() + 5);
 		this.invalidate();
 	}
 

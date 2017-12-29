@@ -15,14 +15,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.example.user.zle.R;
-import com.example.user.zle.enums.Difficulty;
 
 import java.io.File;
 
 public class PuzzleSolveActivity extends Activity {
 	private PuzzleView puzzleView;
 	private Bitmap image;
-	private Difficulty difficulty;
+
 	private int puzzleInt;
 
 	private AlertDialog.Builder builder;
@@ -36,28 +35,19 @@ public class PuzzleSolveActivity extends Activity {
 
 		puzzleInt = this.getIntent().getIntExtra("image", 0);
 		image = (Bitmap) BitmapFactory.decodeResource(getResources(), puzzleInt);
-		String difficulty = this.getIntent().getStringExtra("difficulty");
-
-		if (difficulty.equals("easy"))
-			this.difficulty = Difficulty.EASY;
-		else if (difficulty.equals("medium"))
-			this.difficulty = Difficulty.MEDIUM;
-		else
-			this.difficulty = Difficulty.HARD;
 
 		puzzleView = (PuzzleView) this.findViewById(R.id.puzzleView);
 
 		// Now we need to test if it already exists.
-		File testExistance = new File(path(puzzleInt, this.difficulty.toString()));
+		File testExistance = new File(path(puzzleInt));
 
 		if (testExistance != null && testExistance.exists()) {
-			puzzleView.loadPuzzle(path(puzzleInt, this.difficulty.toString()));
+			puzzleView.loadPuzzle(path(puzzleInt));
 		} else {
-			puzzleView.loadPuzzle(image, this.difficulty, path(puzzleInt, this.difficulty.toString()));
+			puzzleView.loadPuzzle(image, path(puzzleInt));
 		}
 
-		preview_view = (ImageView) getLayoutInflater().inflate(
-				R.layout.preview_puzzle, null);
+		preview_view = (ImageView) getLayoutInflater().inflate(R.layout.preview_puzzle, null);
 		preview_view.setImageBitmap(image);
 
 		preview_dialog = new Dialog(this);
@@ -72,8 +62,9 @@ public class PuzzleSolveActivity extends Activity {
 
 		Button menu = (Button) this.findViewById(R.id.menu);
 
-		final CharSequence[] items = { getString(R.string.show_cover),
-				getString(R.string.solve), getString(R.string.reset) };
+		final CharSequence[] items = {
+				getString(R.string.show_cover),
+				getString(R.string.solve), getString(R.string.reset)};
 
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int item) {
@@ -102,7 +93,6 @@ public class PuzzleSolveActivity extends Activity {
 		menu.setOnClickListener(menuListener);
 	}
 
-	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -111,32 +101,30 @@ public class PuzzleSolveActivity extends Activity {
 
 	public void onPause() {
 		super.onPause();
-		puzzleView.savePuzzle(path(puzzleInt, difficulty.toString()));
+		puzzleView.savePuzzle(path(puzzleInt));
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle b) {
 		super.onSaveInstanceState(b);
 		b.putInt("puzzleInt", puzzleInt);
-		b.putString("difficulty", difficulty.toString());
 	}
 
 	@Override
 	public void onRestoreInstanceState(Bundle b) {
 		super.onRestoreInstanceState(b);
 		puzzleInt = b.getInt("puzzleInt");
-		difficulty = Difficulty.getEnumFromString(b.getString("difficulty"));
-		puzzleView.loadPuzzle(path(puzzleInt, difficulty.toString()));
+		puzzleView.loadPuzzle(path(puzzleInt));
 	}
 
-	private String path(int puzzle, String difficulty) {
+	private String path(int puzzle) {
 		String rv = null;
 		if (Environment.getExternalStorageState().equals("mounted")) {
 			rv = getExternalCacheDir().getAbsolutePath() + "/" + puzzle + "/"
-					+ difficulty + "/";
+					+ "easy" + "/";
 		} else {
 			rv = getCacheDir().getAbsolutePath() + "/" + puzzle + "/"
-					+ difficulty + "/";
+					+ "easy" + "/";
 		}
 		return rv;
 	}
